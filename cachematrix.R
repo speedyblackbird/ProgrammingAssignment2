@@ -5,17 +5,17 @@
 ## and cached inverse of it (I), which is initialized as NULL. 
 
 makeCacheMatrix <- function(x = matrix()) {
-        I <- NULL
-        set <- function(y = matrix()) {
+        inv_m <- NULL
+        set <- function(y) {
                 x <<- y
-                I <<- NULL
+                inv_m <<- NULL
         }
         get <- function() x
-        setInverse <- function(Inverse=matrix()) I <<- Inverse
-        getInverse <- function() I
+        set_Inv <- function(inverse) inv_m <<- inverse
+        get_Inv <- function() inv_m
         list(set = set, get = get,
-             setInverse = setInverse,
-             getInverse = getInverse)
+             set_Inv = set_Inv,
+             get_Inv = get_Inv)
 }
 
 
@@ -24,13 +24,13 @@ makeCacheMatrix <- function(x = matrix()) {
 ## calculate the matrix inverse and store it to the cache.
 
 cacheSolve <- function(x, ...) {
-        I <- x$getInverse()
-        if(!is.null(I)) {
+        inv_m <- x$get_Inv()
+        if(!is.null(inv_m)) {
                 message("getting cached data")
-                return(I)
+                return(inv_m)
         }
         data <- x$get()
-        I <- solve(data, ...)
-        x$setInverse(I)
-        I
+        inv_m <- solve(data, ...)
+        x$set_Inv(inv_m)
+        inv_m
 }
